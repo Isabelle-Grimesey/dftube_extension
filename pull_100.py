@@ -2,11 +2,12 @@
 # Stores results by BSR (bestseller rank) in csv.
 # csv file name: books.csv
 # csv headers: bsr, title, genre, url to product listing (consider inserting info into generic url format instead of storing all of them)
-# eventually scale up from csv file to database
-# how to update data? make a separate py file, scrape but only write a line to the csv if it is new
 # since I have a list of top 10k, ordered, i do not need crawling nor bsr
 # i might need bsr if i want it as a parameter of popularity - for top 10k, it doesn't matter since they are all profitable
-# i might need bsr for database - maybe not
+
+# to do top 10,000 titles, this would take about 100 minutes (assuming linear scaling)
+# this would especially be a problem when it comes to updating - it will still take a long time, even if it is not writing everything.
+# a database might be faster
 
 # references: https://docs.python-guide.org/scenarios/scrape/
 #             https://lxml.de/lxmlhtml.html#html-element-methods
@@ -28,11 +29,12 @@ for i in range(0, 2):
 
     # find and write titles from potential title list
     contains_titles = tree.xpath('//div[@class]')
-    j = 0;
+    #j = 0;
     for title in contains_titles:
         if "p13n-sc-truncate" in title.classes or "p13n-sc-line-clamp-1" in title.classes:
-            f.write(str((i*50 + 1)+j) + "," + title.text_content().strip() + "\n")
-            j=j+1
+            #f.write(str((i*50 + 1)+j) + "," + title.text_content().strip() + "\n")
+            f.write(title.text_content().strip() + "\n")
+            #j=j+1
 
 f.close()
 
